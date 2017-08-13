@@ -35,7 +35,6 @@ const UserNameLabel =
   const UsernameContainer = styled.div`
     display: flex;
     flex-direction: row;
-    margin-bottom: 25px;
   `;
 
   export default class UsernameTextbox extends React.Component{
@@ -48,17 +47,18 @@ const UserNameLabel =
 		this.setState({ value: this.props.defaultValue });
 	};    
     render = () => {
-      let {inputWidth , inputHeight, iconSize, labelHeight, otherProps} = this.props;
+      let {inputWidth , inputHeight, iconSize, labelHeight, labelWidth, otherProps} = this.props;
       
       if(inputWidth === null || inputWidth === undefined) inputWidth = '350px';
       if(inputHeight === null || inputHeight === undefined) inputHeight = '38px';
       if(iconSize === null || iconSize === undefined) iconSize = '30';
       if(labelHeight == null || labelHeight === undefined) labelHeight = '40px';
+      if(labelWidth == null || labelWidth === undefined) labelWidth = '38px';
 
 
       return (
         <UsernameContainer>
-          <UserNameLabel size={iconSize} style={{height: labelHeight}} for='username' />
+          <UserNameLabel size={iconSize} style={{height: labelHeight, width: labelWidth}} for='username' />
           <UsernameInput autoFocus={true} 
               style={{width: inputWidth, height: inputHeight}} 
               type='text' 
