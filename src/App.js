@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import UsernameTexbox from './controls/usernameTextbox.js';
+import PasswordTextbox from './controls/passwordTextbox.js';
 import colors from './libs/colors.js';
 import styled from 'styled-components';
 
 const ControlContainer = styled.div`
   width: 33%;
   min-width: 300px;
+  max-width: 330px;
   height: 20%;
   padding: 10px;
+  margin: 20px;
   
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   transition: all 0.3s cubic-bezier(.25,.8,.25,1);
@@ -35,6 +38,9 @@ class App extends Component {
         <div style={{margin:'10px'}}>
           <ControlContainer>
             <UsernameTexbox />
+          </ControlContainer>
+          <ControlContainer>
+            <PasswordTextbox />
           </ControlContainer>
         </div>
       </div>
