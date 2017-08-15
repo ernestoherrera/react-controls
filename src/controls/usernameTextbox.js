@@ -27,7 +27,7 @@ const UserNameLabel =
   }`;
 
   const UsernameInput = styled.input`
-    font-size: 1.2em;
+    font-size: 1.0em;
     display: block;
     background-color: ${colors.whitesmoke};    
     margin: 0;
@@ -56,7 +56,7 @@ const UserNameLabel =
       let {inputWidth , inputHeight, iconSize, labelHeight, labelWidth, otherProps} = this.props;
       let overallHeight = '32px';
 
-      if(inputWidth === null || inputWidth === undefined) inputWidth = '350px';
+      if(inputWidth === null || inputWidth === undefined) inputWidth = '275px';
       if(inputHeight === null || inputHeight === undefined) inputHeight = overallHeight;
       if(iconSize === null || iconSize === undefined) iconSize = '26';
       if(labelHeight == null || labelHeight === undefined) labelHeight = overallHeight;
