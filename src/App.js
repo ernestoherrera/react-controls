@@ -5,12 +5,14 @@ import styled from 'styled-components';
 
 const ControlContainer = styled.div`
   width: 33%;
+  min-width: 300px;
   height: 20%;
   padding: 10px;
   
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 5px 4px 4px rgba(0,0,0,0.24);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
   &:hover {
-     background-color: ${colors.black};
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
   `;
 
 const AppHeader = styled.div`
@@ -19,7 +21,7 @@ const AppHeader = styled.div`
   background-color: #222;
   height: 80px;
   margin: 0px 0px 10px 0px; 
-  color: #ffffff;
+  color: ${colors.blanchedalmond};
 `;
 
 class App extends Component {
@@ -30,9 +32,9 @@ class App extends Component {
           <h2>Welcome to React Controls</h2>
           <div>implemented with Styled-Components</div>
         </AppHeader>
-        <div>
-          <ControlContainer >
-            <UsernameTexbox labelHeight='38px'/>
+        <div style={{margin:'10px'}}>
+          <ControlContainer>
+            <UsernameTexbox />
           </ControlContainer>
         </div>
       </div>
