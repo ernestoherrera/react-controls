@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const colors = {
   "whitesmoke": "#f5f5f5",
   "black": "#000000",
+  "darkred": "#8b0000",
 }
 
 const PasswordLabel =  styled.label`${({size}) => {
@@ -37,18 +38,34 @@ const PasswordLabel =  styled.label`${({size}) => {
 `;
   const PasswordContainer = styled.div`
     display: flex;
-    display-direction: row;    
+    display-direction: row;
   `;
+
+  const ValidationContainer = styled.div`${({hide}) => {
+    return hide ? `
+      display: none;
+      ` : `
+      margin-top: 3px;
+      display: block;
+      color:${colors.darkred};
+      `;
+    }
+  }`;
 
 export default class PasswordTextbox extends React.Component{
   constructor(props){
-    super(props)
+    super(props);
+  }
+
+  willComponentMount = () => {
+    this.setState({capsLockOn: false});
   }
 
   render = () => {
 
     let {inputWidth , inputHeight, iconSize, labelHeight, labelWidth, otherProps} = this.props;
     let overallHeight = '32px';
+    let showValidator = this.state !== null ? this.state.capsLockOn : false;
 
     if(inputWidth === null || inputWidth === undefined) inputWidth = '275px';
     if(inputHeight === null || inputHeight === undefined) inputHeight = overallHeight;
@@ -57,6 +74,7 @@ export default class PasswordTextbox extends React.Component{
     if(labelWidth == null || labelWidth === undefined) labelWidth = '32px';
 
     return(
+      <div>
       <PasswordContainer>
         <PasswordLabel size={iconSize} style={{width: labelWidth, height: labelHeight}}/>
         <InputPassword 
@@ -64,10 +82,54 @@ export default class PasswordTextbox extends React.Component{
             type='password' 
             name='password' 
             id='password' 
-            onChange={this._passwordUpdated}  
-            onKeyDown={this._handleKeyDown} 
-            onKeyPress={this._handleKeyPress} />
+            onChange={this._change}
+            onKeyDown={this._keyDown}
+            onKeyPress={this._keyPress} />
       </PasswordContainer>
+      <ValidationContainer hide={!showValidator}>
+          CAPS LOCK IS ON
+      </ValidationContainer>
+      </div>
     );
+  };
+
+  _change = (inputBox) => {
+    this.setState({ value: inputBox.target.value});
+    this.onChange(inputBox.target.value);
+  };
+
+  onChange = (value) => {
+    if (this.props.onChange) this.props.onChange(value);
   }
+
+  _keyDown = (key) => {
+    if(key.keyCode === 20) this.setState({capsLockOn: true});
+  };
+
+  _keyPress = (key) => {
+    this.setState({capsLockOn: this._isCapsLockOn(key)});
+  };
+
+  _isCapsLockOn = (e) => {
+    e = (e) ? e : window.event;
+
+    let charCode = false;
+
+    charCode = e.which ? e.which : 
+                e.keyCode ? e.keyCode : 
+                false;
+
+    let shifton = false;
+    if (e.shiftKey) {
+        shifton = e.shiftKey;
+    } else if (e.modifiers) {
+        shifton = !!(e.modifiers & 4);
+    }
+
+    if (charCode >= 97 && charCode <= 122 && shifton)  return true;
+
+    if (charCode >= 65 && charCode <= 90 && !shifton) return true;
+
+    return false;
+  };
 }
