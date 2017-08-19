@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const colors = {
@@ -95,10 +96,10 @@ export default class PasswordTextbox extends React.Component{
 
   _change = (inputBox) => {
     this.setState({ value: inputBox.target.value});
-    this.onChange(inputBox.target.value);
+    this.onInputPasswordChange(inputBox.target.value);
   };
 
-  onChange = (value) => {
+  onInputPasswordChange = (value) => {
     if (this.props.onChange) this.props.onChange(value);
   }
 
@@ -133,3 +134,7 @@ export default class PasswordTextbox extends React.Component{
     return false;
   };
 }
+
+PasswordTextbox.propTypes = {
+  onChange: PropTypes.func
+};

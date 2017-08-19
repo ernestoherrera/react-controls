@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const colors = {
@@ -46,11 +47,13 @@ const UserNameLabel =
   export default class UsernameTextbox extends React.Component{
     constructor(props){
       super(props)
+      this.state = {value: ''};
     }
 
     
   componentWillMount = () => {
-		this.setState({ value: this.props.defaultValue });
+    if(this.props.defaultValue)
+		  this.setState({ value: this.props.defaultValue });
 	};    
     render = () => {
       let {inputWidth , inputHeight, iconSize, labelHeight, labelWidth, otherProps} = this.props;
@@ -80,5 +83,15 @@ const UserNameLabel =
 
     _usernameUpdated = (txtBox) => {
       this.setState({username: txtBox.target.value});
+      this.onUsernameInputChange(txtBox.target.value);
+    }
+
+    onUsernameInputChange = (value) => {
+      if(this.props.onChange)
+        this.props.onChange(value);
     }
   }
+
+UsernameTextbox.propTypes = {
+  onChange: PropTypes.func,
+}
