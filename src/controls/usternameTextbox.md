@@ -9,6 +9,7 @@ You may change the css styles directly in the file.
     onChange : PropTypes.func
 
 By providing this callback function, the UsernameTextbox component will pass to its client its value.
+
 -------------------------------------------------------------------------------------------
 
     inputWidth : PropTypes.string
