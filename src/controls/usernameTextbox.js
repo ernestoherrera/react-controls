@@ -94,4 +94,9 @@ const UserNameLabel =
 
 UsernameTextbox.propTypes = {
   onChange: PropTypes.func,
+  inputWidth: PropTypes.string , //i,e '32px'
+  inputHeight: PropTypes.string, 
+  iconSize: PropTypes.number, 
+  labelHeight: PropTypes.string, 
+  labelWidth: PropTypes.string
 }
