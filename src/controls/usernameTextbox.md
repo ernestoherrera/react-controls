@@ -4,6 +4,10 @@
 This control allows you to collect username information. It uses styled-components library for css styling; therefore, to use this control in your projects, all you need is the one file: usernameTextbox.js
 You may change the css styles directly in the file.
 
+## Composition
+
+UsernameTextbox is made up by a label and input html controls. Screen readers use label controls to ease the data input for people with disabilities.
+
 ## Properties
 
     onChange : PropTypes.func
