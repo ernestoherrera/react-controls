@@ -3,39 +3,48 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const colors = {
-  "whitesmoke": "#f5f5f5",
   "black": "#000000",
   "darkred": "#8b0000",
 }
 
-const PasswordLabel =  styled.label`${({size}) => {
+const Themes = {
+  default: {color: colors.black , borderColor: colors.black, svgColor: '000000'},
+  primary: {color: '#008cba', borderColor: '#008cba', svgColor: '008cba'},
+  green: {color: '#21ce99', borderColor: '#21ce99', svgColor: '21ce99'}
+}
+
+const PasswordLabel =  styled.label`${({size, theme}) => {
     let picSize = (size !== undefined) ? size : 24;
+    theme = !theme ? 'default' : theme;
+
+    let svgColor = Themes[theme].svgColor;
+    let borderColor = Themes[theme].borderColor;
 
     return `
     width: ${picSize}px;
     margin-right: 0px;
-    background-color: ${colors.whitesmoke};
-    background-image: url(data:image/svg+xml,%3Csvg%20fill%3D%22%23000000%22%20height%3D%22${picSize}%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%22${picSize}%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M0%200h24v24H0z%22%20fill%3D%22none%22/%3E%0A%20%20%20%20%3Cpath%20d%3D%22M18%208h-1V6c0-2.76-2.24-5-5-5S7%203.24%207%206v2H6c-1.1%200-2%20.9-2%202v10c0%201.1.9%202%202%202h12c1.1%200%202-.9%202-2V10c0-1.1-.9-2-2-2zm-6%209c-1.1%200-2-.9-2-2s.9-2%202-2%202%20.9%202%202-.9%202-2%202zm3.1-9H8.9V6c0-1.71%201.39-3.1%203.1-3.1%201.71%200%203.1%201.39%203.1%203.1v2z%22/%3E%0A%3C/svg%3E);
+    background-color: transparent;
+    background-image: url(data:image/svg+xml,%3Csvg%20fill%3D%22%23${svgColor}%22%20height%3D%22${picSize}%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%22${picSize}%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M0%200h24v24H0z%22%20fill%3D%22none%22/%3E%0A%20%20%20%20%3Cpath%20d%3D%22M18%208h-1V6c0-2.76-2.24-5-5-5S7%203.24%207%206v2H6c-1.1%200-2%20.9-2%202v10c0%201.1.9%202%202%202h12c1.1%200%202-.9%202-2V10c0-1.1-.9-2-2-2zm-6%209c-1.1%200-2-.9-2-2s.9-2%202-2%202%20.9%202%202-.9%202-2%202zm3.1-9H8.9V6c0-1.71%201.39-3.1%203.1-3.1%201.71%200%203.1%201.39%203.1%203.1v2z%22/%3E%0A%3C/svg%3E);
     background-repeat: no-repeat;
     background-position: center;
     border-radius: 5px 0px 0px 5px;
-    border-top: 2px;
-    border-left: 2px;
-    border-bottom: 2px;
+    border-top: 1px;
+    border-left: 1px;
+    border-bottom: 1px;
     border-style: solid;
-    border-color: ${colors.black}`}
+    border-color: ${borderColor}`}
   }`;
 
   const InputPassword = styled.input`
-    font-size: 1.0em;
+    font-size: 0.9em;
     display: block;
-    background-color: ${colors.whitesmoke};
+    background-color: transparent;
     margin: 0;
     padding-left: 4px;
-    border-radius: 0px 5px 5px 0px;
-    border: 2px;
+    border-radius: 0px 5px 5px 0px; 
+    border: 1px;
     border-style: solid;
-    border-color: ${colors.black};
+    border-color: ${props => props.borderColor};
 `;
   const PasswordContainer = styled.div`
     display: flex;
@@ -56,6 +65,7 @@ const PasswordLabel =  styled.label`${({size}) => {
 export default class PasswordTextbox extends React.Component{
   constructor(props){
     super(props);
+    this.state = {capsLockOn: false};
   }
 
   willComponentMount = () => {
@@ -64,9 +74,10 @@ export default class PasswordTextbox extends React.Component{
 
   render = () => {
 
-    let {inputWidth , inputHeight, iconSize, labelHeight, labelWidth, otherProps} = this.props;
+    let {inputWidth , inputHeight, iconSize, labelHeight, labelWidth, id, theme, ...otherProps} = this.props;
     let overallHeight = '32px';
     let showValidator = this.state !== null ? this.state.capsLockOn : false;
+    theme = !theme ? 'default' : theme;
 
     if(inputWidth === null || inputWidth === undefined) inputWidth = '275px';
     if(inputHeight === null || inputHeight === undefined) inputHeight = overallHeight;
@@ -77,15 +88,18 @@ export default class PasswordTextbox extends React.Component{
     return(
       <div>
       <PasswordContainer>
-        <PasswordLabel size={iconSize} style={{width: labelWidth, height: labelHeight}}/>
+        <PasswordLabel size={iconSize} style={{width: labelWidth, height: labelHeight}} theme={theme}/>
         <InputPassword 
             style={{width: inputWidth, height: inputHeight}}
             type='password' 
             name='password' 
-            id='password' 
+            id={id}
+            borderColor={Themes[theme].borderColor}
             onChange={this._change}
             onKeyDown={this._keyDown}
-            onKeyPress={this._keyPress} />
+            onKeyPress={this._keyPress}
+            {...otherProps}
+            />
       </PasswordContainer>
       <ValidationContainer hide={!showValidator}>
           CAPS LOCK IS ON
@@ -136,5 +150,6 @@ export default class PasswordTextbox extends React.Component{
 }
 
 PasswordTextbox.propTypes = {
+  id: PropTypes.string.isRequired,
   onChange: PropTypes.func
 };
