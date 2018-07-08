@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import UsernameTexbox from './controls/usernameTextbox.js';
 import PasswordTextbox from './controls/passwordTextbox.js';
 import Button from './controls/button.jsx';
-import RadioButton from './controls/radioButton.jsx';
+import RadioGroup from './controls/radioGroup.jsx';
 import colors from './libs/colors.js';
 import styled from 'styled-components';
 
 const ControlContainer = styled.div`
-  width: 90%;
+  width: 95%;
   min-width: 400px;
   height: 40%;
   padding: 10px;
@@ -16,12 +16,6 @@ const ControlContainer = styled.div`
   transition: all 0.3s cubic-bezier(.25,.8,.25,1);
   &:hover {
   box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-  `;
-
-const CodeContainer = styled.div`
-  position: fixed;
-  display: inline-block;
-  margin-left: 20px;
   `;
 
 const Code = styled.code`
@@ -40,12 +34,32 @@ const AppHeader = styled.div`
   color: ${colors.blanchedalmond};
 `;
 
+const themes = [{themeName:'Default', id: 'default', selected: false },
+{themeName:'Primary', id: 'primary', selected: false },
+{themeName:'Green', id: 'green', selected: true },
+{themeName:'Savor', id: 'savor', selected: false }];
+
 class App extends Component {
+  constructor(props){
+    super(props);
+    this._onRadioGroupClick = this._onRadioGroupClick.bind(this);
+    themes.forEach((item) => {
+      if (item.selected)
+        this.state = {selectedTheme : item };
+    });
+  }
 
   _onButtonClick = (event, buttonName) => {
     document.getElementById('buttonResponse').innerText = buttonName + ' clicked';
   }
+
+  _onRadioGroupClick = (event, index, selectedItem) =>{
+    this.setState({selectedTheme : selectedItem});
+  }
+
   render() {
+    let selectedThemeName = this.state.selectedTheme.id;
+
     return (
       <div>
         <AppHeader>
@@ -54,57 +68,77 @@ class App extends Component {
         </AppHeader>
         <div style={{ margin: '10px', width: '100%' }}>
           <ControlContainer>
-            <UsernameTexbox id='username' />
-            <div>
-              <RadioButton />
+            <div style={{display: 'inline-block', margin: '0px 10px 0px 0px'}}>
+              <div style={{margin: '0px 0px 12px 0px'}}>
+                <UsernameTexbox id='username' placeholder='Username' theme={selectedThemeName} />
+              </div>
+              <div style={{margin: '0px 0px 12px 0px'}}>
+              <PasswordTextbox id='passwordBox' placeholder='Enter password' theme={selectedThemeName} />
+              </div>
+              <div>
+                <span style={{display: 'inline-block', margin: '0px 10px 0px 0px'}}>Theme:</span>
+                <RadioGroup items={themes}
+                            getValueFunc={(item) => item.selected}
+                            getLabelContentFunc={(item) => item.themeName}
+                            getIdFunc={(item) => item.id}
+                            selectedItem={this.state.selectedTheme}
+                            onClick={(event, index, selectedItem) => this._onRadioGroupClick(event, index, selectedItem)}
+                            />
+              </div>
             </div>
- {/*            <CodeContainer>
-              <pre>
-                <Code>
-                  &lt;UserNameTextbox id='username' placeholder='Username' theme='default' /&gt;
-</Code>
+            <div style={{display: 'inline-block', margin: '0px', verticalAlign: 'top'}}>
+              <div style={{margin: '0px 0px 10px 0px'}} >Usage:</div>
+              <pre style={{whiteSpace: 'pre-wrap', margin: '0px 10px 0px 0px',fontSize:'10pt', fontFamily: 'Courier New'}}>
+                <Code style={{fontSize:'10pt', fontFamily: 'Courier New', whiteSpace: 'pre-wrap'}}>
+                  &lt;UserNameTextbox 
+                      id='username'
+                      placeholder='Username'
+                      theme={selectedThemeName} /&gt; <br/>
+                  &lt;PasswordTextbox id='passwordBox' placeholder='Enter password' theme={selectedThemeName}
+                  /&gt;
+                </Code>
               </pre>
-            </CodeContainer> */}
+            </div>
           </ControlContainer>
           <ControlContainer>
-            <UsernameTexbox id='primaryUsrNm' placeholder='Username' theme='primary' />
-          </ControlContainer>
-          <ControlContainer>
-            <UsernameTexbox id='greenUsrNm' placeholder='Username' theme='green' />
-          </ControlContainer>
-          <ControlContainer>
-            <PasswordTextbox id='passwordBox' placeholder='Enter password' />
-          </ControlContainer>
-          <ControlContainer>
-            <PasswordTextbox id='pwdBox' theme='primary' />
-          </ControlContainer>
-          <ControlContainer>
-            <PasswordTextbox id='greenPwdBox' placeholder='Password' theme='green' />
-          </ControlContainer>
-          <ControlContainer>
-            <Button buttonLabel='Click Me'
-              onClick={(e) => this._onButtonClick(e, 'default')}
-              tabIndex='1'
-            />
-            <Button buttonLabel='Primary'
-              theme='primary'
-              style={{ marginLeft: '5px' }}
-              onClick={(e) => this._onButtonClick(e, 'primary')}
-              tabIndex='2'
-            />
-            <Button buttonLabel='Green'
-              theme='green'
-              style={{ marginLeft: '5px' }}
-              onClick={(e) => this._onButtonClick(e, 'Green')}
-              tabIndex='3'
-            />
-            <Button buttonLabel='Savor'
-              theme='savor'
-              style={{ marginLeft: '5px' }}
-              onClick={(e) => this._onButtonClick(e, 'savor')}
-              tabIndex='4'
-            />
-            <div id='buttonResponse' style={{ display: 'block', width: '100%', horizontalAlignment: 'center', marginTop: '5px', fontSize: '10px' }}>&nbsp;</div>
+          <div style={{display: 'inline-block', margin: '0px 100px 0px 0px'}}>
+              <Button buttonLabel='Click Me'
+                onClick={(e) => this._onButtonClick(e, 'default')}
+                tabIndex='1'
+              />
+              <Button buttonLabel='Primary'
+                theme='primary'
+                style={{ marginLeft: '5px' }}
+                onClick={(e) => this._onButtonClick(e, 'primary')}
+                tabIndex='2'
+              />
+              <Button buttonLabel='Green'
+                theme='green'
+                style={{ marginLeft: '5px' }}
+                onClick={(e) => this._onButtonClick(e, 'Green')}
+                tabIndex='3'
+              />
+              <Button buttonLabel='Savor'
+                theme='savor'
+                style={{ marginLeft: '5px' }}
+                onClick={(e) => this._onButtonClick(e, 'savor')}
+                tabIndex='4'
+              />
+              <div id='buttonResponse' style={{ display: 'block', width: '100%', horizontalAlignment: 'center', marginTop: '5px', fontSize: '10px' }}>&nbsp;</div>
+            </div>
+            <div style={{display: 'inline-block', margin: '0px', verticalAlign: 'top'}}>
+              <div style={{margin: '0px 0px 10px 0px'}} >Usage:</div>
+              <pre style={{whiteSpace: 'pre-wrap', margin: '0px 10px 0px 0px',fontSize:'10pt', fontFamily: 'Courier New'}}>
+                <Code style={{fontSize:'10pt', fontFamily: 'Courier New', whiteSpace: 'pre-wrap'}}>
+                  &lt;Button buttonLabel='Savor'
+                    theme='savor' <br />
+                    style=&#123;&#123; marginLeft: '5px' &#125;&#125; // this is optional <br /> 
+                    onClick=&#123;(e) => this._onButtonClick(e, 'savor') &#125;<br />
+                    tabIndex='4' /&gt;
+                </Code>
+              </pre>
+
+            </div>
           </ControlContainer>
         </div>
       </div>

@@ -1,10 +1,11 @@
 import React from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
-
+import styled from 'styled-components';
+//TODO: implement the themes
 //TODO: implement the 'enabled' property
 //may need to come up with disabled css styles
 //TODO: write up readme.md
+
 const colors = {
   lightgray: '#d3d3d3',
   darkgray: '#777',
@@ -59,8 +60,8 @@ const Themes = {
   }
 }
 
-const RadioElement = styled.span`
-  display: inline-block; 
+const CheckElement = styled.span`
+  display: inline-block;
   width: 30px;
   height: 30px;
   margin: 0px;
@@ -71,73 +72,67 @@ const RadioElement = styled.span`
   background-repeat: no-repeat;
   vertical-align: middle;
   background-image: ${
-    props => props.selected ? 
-      `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' width='30px' height='30px' viewbox='0 0 20 20'%3E%3Ccircle cx='15' cy='15' r='${props.radius}' stroke-width='.8' stroke='${props.borderColor}' fill='${props.radioButtonOnBackgroundColor}' class='shape' /%3E%3Ccircle cx='15' cy='15' r='6' stroke-width='.5' stroke='${props.borderColor}' fill='${props.radioButtonOnBackgroundColor2}' /%3E%3C/svg%3E");` 
-  : 
-      `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' width='30px' height='30px' viewbox='0 0 20 20'%3e%3ccircle cx='15' cy='15' r='${props.radius}' stroke-width='.8' fill='${props.backgroundColor}' stroke='${props.borderColor}' class='shape' /%3e%3c/svg%3e");`
-    }
-    transition: background-image 0.5s ease-in-out;
+  props => props.checked ? 
+    `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' viewbox='0 0 30 30' %3e%3crect x='1.5' y='1.5' rx='5' ry='5' width='27' height='27' stroke='black' fill='transparent' stroke-width='1.5'/%3e%3cpath stroke-width='2.5' stroke='green' fill='none' d='M5 15 L12 22 Q15 10 ,27 5'/%3e%3c/svg%3e");` 
+: 
+    `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' viewbox='0 0 30 30' %3e%3crect x='1.5' y='1.5' rx='5' ry='5' width='27' height='27' stroke='black' fill='transparent' stroke-width='1.5'/%3e%3c/svg%3e");`
+  }
+  transition: background-image 0.5s ease-in-out;
+  background-position: 50% 50%;
 `;
 
-const RadioLabel = styled.span`
+const CheckboxLabel = styled.span`
   color: ${props => props.color};
-  margin: 0px 10px 0px 0px;
-  padding: 0px 0px 0px 3px;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 5px;
   cursor: pointer;
 `
 
-export default class RadioButton extends React.Component{
+export default class Checkbox extends React.Component {
   constructor(props){
     super(props);
-    this.state = {selected : !!props.isSelected};
+    this.state = { checked: !!props.checked };
     this._onClick = this._onClick.bind(this);
   }
-
-  _onClick = (event) => {
-
-    if (this.props.onClick)
-      this.props.onClick(event);
-
-    this.setState({selected: !this.state.selected});
-  }
-
   componentDidMount = () => {
 
-	};
+  }
+  _onClick = (event) => { 
 
-  render =() =>{
-
+    if (this.props.enabled !== undefined && !this.props.enabled) return;
+    if (this.props.onClick !== undefined) this.props.onClick(event, !this.state.checked, this.props.id);
+    this.setState({checked: !this.state.checked});
+  }
+  render() {
     let { labelContent, theme, ...otherProps} = this.props;
-    let selected = this.state.selected;
-    
-    if(theme === undefined) theme = 'default'
+    let checked = this.state.checked;
+
+    if(this.props.theme === undefined) theme = 'default';
 
     let borderColor = Themes[theme].borderColor;
     let backgroundColor = Themes[theme].backgroundColor;
-    let radioButtonOnBackgroundColor = Themes[theme].radioButtonOnBackgroundColor;
-    let radioButtonOnBackgroundColor2 = Themes[theme].radioButtonOnBackgroundColor2;
+    let checkboxOnBackgroundColor = Themes[theme].radioButtonOnBackgroundColor;
+    let checkboxOnBackgroundColor2 = Themes[theme].radioButtonOnBackgroundColor2;
     let color = Themes[theme].color;
 
-    return(
-      <div style={{display: 'inline-block'}} >
-
-          <input type='radio' style={{display: 'none'}} />
-            <RadioElement
-              onClick={(event) => this._onClick(event)}
-              selected={selected} 
-              radius='11'
-              radioButtonOnBackgroundColor={radioButtonOnBackgroundColor}
-              radioButtonOnBackgroundColor2={radioButtonOnBackgroundColor2}
-              backgroundColor={backgroundColor}
-              borderColor={borderColor}
-              {...otherProps}/><RadioLabel color={color} onClick={(event) => this._onClick(event)}>{labelContent}</RadioLabel>
-      </div>
+    console.log(checked);
+    return (
+      <span>
+      <CheckElement 
+        checked= {checked}
+        onClick={(event) => this._onClick(event)}
+        checkboxOnBackgroundColor={checkboxOnBackgroundColor}
+        checkboxOnBackgroundColor2={checkboxOnBackgroundColor2}
+        backgroundColor={backgroundColor}
+        borderColor={borderColor}
+        {...otherProps}
+      /><CheckboxLabel color={color} onClick={(event) => this._onClick(event)} >{labelContent}</CheckboxLabel>
+    </span>
     );
   }
-
 }
 
-RadioButton.propTypes = {
+Checkbox.propTypes = {
   labelContent : PropTypes.string.isRequired,
   id : PropTypes.string,
   selected: PropTypes.bool,

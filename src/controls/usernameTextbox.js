@@ -3,13 +3,22 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const colors = {
-  'black': '#000000',
-}
+  lightgray: '#d3d3d3',
+  darkgray: '#777',
+  black: '#000',
+  white: '#fff',
+  darkblue: '#00008b',
+  primaryblue: '#008cba',
+  green: '#21ce99',
+  doradoyellow: '#ffd700'
+};
+
 const Themes = {
-  default: {color: colors.black , borderColor: colors.black, svgColor: '000000'},
-  primary: {color: '#008cba', borderColor: '#008cba', svgColor: '008cba'},
-  green: {color: '#21ce99', borderColor: '#21ce99', svgColor: '21ce99'}
-}
+  default: {color: colors.black , borderColor: colors.black, backgroundColor: 'transparent', svgColor: '000000'},
+  primary: {color: colors.primaryblue, borderColor: colors.primaryblue, backgroundColor: 'transparent', svgColor: '008cba'},
+  green: {color: colors.green, borderColor: colors.green, backgroundColor: 'transparent', svgColor: '21ce99'},
+  savor: {color: colors.black, borderColor: colors.doradoyellow, backgroundColor: 'transparent', svgColor: 'ffd700'}
+};
 
 const UserNameLabel =  
 
@@ -62,13 +71,16 @@ const UserNameLabel =
   componentWillMount = () => {
     if(this.props.defaultValue)
 		  this.setState({ value: this.props.defaultValue });
-	};    
+	};
     render = () => {
       let {inputWidth , inputHeight, iconSize, labelHeight, labelWidth, theme, id, ...otherProps} = this.props;
       let overallHeight = '32px';
       let borderColor = colors.black;
       theme = !theme ? 'default' : theme;
 
+      //if the theme name is not in our dictionary -> default
+      if (!Themes[theme]) theme = 'default';
+      
       if(!id) id = 'username';
       if(inputWidth === null || inputWidth === undefined) inputWidth = 275;
       if(inputHeight === null || inputHeight === undefined) inputHeight = overallHeight;
@@ -78,12 +90,14 @@ const UserNameLabel =
 
       borderColor = Themes[theme].borderColor;
       let containerWidth = inputWidth + labelWidth + 5;
+      let backgroundColor = Themes[theme].backgroundColor;
 
       return (
         <UsernameContainer style={{width: containerWidth + 'px'}}>
           <UserNameLabel size={iconSize} 
               style={{height: labelHeight, width: labelWidth + 'px'}}
               borderColor={borderColor}
+              backgroundColor={backgroundColor}
               theme={theme}
               for={id} />
           <UsernameInput autoFocus={true} 
@@ -94,6 +108,7 @@ const UserNameLabel =
               autoCapitalize='none'
               onChange={this._usernameUpdated}
               borderColor={borderColor}
+              backgroundColor={backgroundColor}
               {...otherProps}
           >
           </UsernameInput>
