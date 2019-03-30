@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import {svgEncodeHexColor} from '../libs/utils';
 
 //TODO: implement the 'enabled' property
 //may need to come up with disabled css styles
@@ -72,10 +73,12 @@ const RadioElement = styled.span`
   vertical-align: middle;
   background-image: ${
     props => props.selected ? 
-      `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' width='30px' height='30px' viewbox='0 0 20 20'%3E%3Ccircle cx='15' cy='15' r='${props.radius}' stroke-width='.8' stroke='${props.borderColor}' fill='${props.radioButtonOnBackgroundColor}' class='shape' /%3E%3Ccircle cx='15' cy='15' r='6' stroke-width='.5' stroke='${props.borderColor}' fill='${props.radioButtonOnBackgroundColor2}' /%3E%3C/svg%3E");` 
+      props.selectedRadio
   : 
       `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' width='30px' height='30px' viewbox='0 0 20 20'%3e%3ccircle cx='15' cy='15' r='${props.radius}' stroke-width='.8' fill='${props.backgroundColor}' stroke='${props.borderColor}' class='shape' /%3e%3c/svg%3e");`
     }
+    background-repeat: no-repeat;
+    background-position: center;
     transition: background-image 0.5s ease-in-out;
 `;
 
@@ -117,14 +120,19 @@ export default class RadioButton extends React.Component{
     let radioButtonOnBackgroundColor = Themes[theme].radioButtonOnBackgroundColor;
     let radioButtonOnBackgroundColor2 = Themes[theme].radioButtonOnBackgroundColor2;
     let color = Themes[theme].color;
-
+    let radious = 11;
+    
+    let selectedRadio = `url(data:image/svg+xml,%20%20%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20version%3D%221.1%22%20width%3D%2230px%22%20height%3D%2230px%22%20viewbox%3D%220%200%2020%2020%22%3E%0A%20%20%20%20`;
+    selectedRadio += `%3Ccircle%20cx%3D%2215%22%20cy%3D%2215%22%20r%3D%22${radious}%22%20stroke-width%3D%22.5%22%20stroke%3D%22${svgEncodeHexColor(borderColor)}%22%20fill%3D%22${svgEncodeHexColor(radioButtonOnBackgroundColor)}%22%20class%3D%22shape%22%20%2F%3E%0A%20%20%20%20%20%3Ccircle%20cx%3D%2215%22%20cy%3D%2215%22%20r%3D%225%22%20stroke-width%3D%22.5%22%20stroke%3D%22${svgEncodeHexColor(borderColor)}%22%20fill%3D%22${svgEncodeHexColor(radioButtonOnBackgroundColor2)}%22%20%20%2F%3E%0A%20%20%20%3C%2Fsvg%3E);`
+    console.log(selectedRadio);
     return(
       <div style={{display: 'inline-block'}} >
 
           <input type='radio' style={{display: 'none'}} />
             <RadioElement
               onClick={(event) => this._onClick(event)}
-              selected={selected} 
+              selected={selected}
+              selectedRadio={selectedRadio}
               radius='11'
               radioButtonOnBackgroundColor={radioButtonOnBackgroundColor}
               radioButtonOnBackgroundColor2={radioButtonOnBackgroundColor2}

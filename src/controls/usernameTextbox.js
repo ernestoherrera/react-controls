@@ -30,7 +30,6 @@ const UserNameLabel =
 
     return `
     width: 32px;
-    display: inline-block;
     margin-right: 0px;
     background-color: transparent;
     background-image: url(data:image/svg+xml,%3Csvg%20fill%3D%22%23${color}%22%20height%3D%22${picSize}%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%22${picSize}%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12%2012c2.21%200%204-1.79%204-4s-1.79-4-4-4-4%201.79-4%204%201.79%204%204%204zm0%202c-2.67%200-8%201.34-8%204v2h16v-2c0-2.66-5.33-4-8-4z%22/%3E%0A%20%20%20%20%3Cpath%20d%3D%22M0%200h24v24H0z%22%20fill%3D%22none%22/%3E%0A%3C/svg%3E);
@@ -45,9 +44,9 @@ const UserNameLabel =
   }`;
 
   const UsernameInput = styled.input`
-    position: fixed;
+
     font-size: 0.9em;
-    display: inline-block;
+    display: block;
     background-color: transparent;
     margin: 0;
     padding-left: 4px;
@@ -58,7 +57,8 @@ const UserNameLabel =
   `;
 
   const UsernameContainer = styled.div`
-    display: inline-block;
+    display: flex;
+    display-direction: row;
   `;
 
   export default class UsernameTextbox extends React.Component{
