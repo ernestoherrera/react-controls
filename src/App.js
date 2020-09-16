@@ -34,17 +34,17 @@ const AppHeader = styled.div`
   color: ${colors.blanchedalmond};
 `;
 
-const themes = [{themeName:'Default', id: 'default', selected: false },
-{themeName:'Primary', id: 'primary', selected: false },
-{themeName:'Green', id: 'green', selected: true },
-{themeName:'Savor', id: 'savor', selected: false }];
+let themes = [{themeName:'Default', id: 'default' },
+{themeName:'Primary', id: 'primary' },
+{themeName:'Green', id: 'green' },
+{themeName:'Savor', id: 'savor'}];
 
 class App extends Component {
   constructor(props){
     super(props);
     this._onRadioGroupClick = this._onRadioGroupClick.bind(this);
     themes.forEach((item) => {
-      if (item.selected)
+      if (item.themeName === 'Default')
         this.state = {selectedTheme : item };
     });
   }
@@ -54,7 +54,10 @@ class App extends Component {
   }
 
   _onRadioGroupClick = (event, index, selectedItem) =>{
-    this.setState({selectedTheme : selectedItem});
+
+    this.setState(state => (
+      {selectedTheme : selectedItem})
+      );
   }
 
   render() {
@@ -78,11 +81,11 @@ class App extends Component {
               <div>
                 <span style={{display: 'inline-block', margin: '0px 10px 0px 0px'}}>Theme:</span>
                 <RadioGroup items={themes}
-                            getValueFunc={(item) => item.selected}
                             getLabelContentFunc={(item) => item.themeName}
                             getIdFunc={(item) => item.id}
                             selectedItem={this.state.selectedTheme}
                             onClick={(event, index, selectedItem) => this._onRadioGroupClick(event, index, selectedItem)}
+                            theme={selectedThemeName}
                             />
               </div>
             </div>

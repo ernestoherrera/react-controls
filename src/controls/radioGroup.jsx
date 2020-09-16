@@ -10,42 +10,40 @@ export default class RadioGroup extends React.Component {
     super(props);
     this._onClick = this._onClick.bind(this);
 
-    if (!!this.props.selectedItem)
-          this.state = { selectedItem: this.props.selectedItem };
-  }
-  componentDidMount = () => {
+    if (!!this.props.selectedItem){
+      this.state = { selectedItem: this.props.selectedItem };
+    }
 
   }
+  componentDidMount = () => {
+ 
+  }
   _onClick = (event, index, item) => {
-    console.log('radio group clicked');
     if (this.props.onClick){
       this.props.onClick(event, index, item);
     }
-
-    this.setState({selectedItem : item});
+    this.setState(state => ({selectedItem : item}));
   }
   render() {
-    let selected = undefined;
-    let selectedId = undefined;
-
-    if (!!this.state.selectedItem){
-      selectedId = this.props.getIdFunc(this.state.selectedItem);
-    }
+    let { selectedItem, theme} = this.props;
+    
+    let selectedItemId = this.props.getIdFunc(selectedItem);
 
     return (
     <div style={{display: 'inline-block'}}>
       {
         this.props.items.map((item, index) => {
 
-          let id = this.props.getIdFunc(item);
-          selected = (selectedId === id);
-
+          let selected = this.props.getIdFunc(item) === selectedItemId;
+          
           return(
             <RadioButton key={index} 
+              selectedItem={this.state.selectedItem}
               selected={selected}
               onClick={(event, index, id) => this._onClick(event, index, item)}
               labelContent={this.props.getLabelContentFunc(item)}
-              id={id}
+              id={selectedItemId}
+              theme={theme}
                 />
             )
         })
@@ -57,9 +55,8 @@ export default class RadioGroup extends React.Component {
 
 RadioGroup.propTypes = {
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
-  getValueFunc: PropTypes.func.isRequired,
   getLabelContentFunc: PropTypes.func.isRequired,
   getIdFunc: PropTypes.func.isRequired,
-  selectedItem: PropTypes.object,
+  selectedItem: PropTypes.object.isRequired,
   onClick: PropTypes.func
 }
